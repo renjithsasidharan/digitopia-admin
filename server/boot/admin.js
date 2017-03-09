@@ -448,11 +448,11 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 		doTemplate('add', req, res, next);
 	});
 
-	router.get(/^\/admin\/views\/([^\/]*)\/([a-f0-9\-]+)\/view$/, userAuth, function (req, res, next) {
+	router.get(/^\/admin\/views\/([^\/]*)\/([^\/]*)\/view$/, userAuth, function (req, res, next) {
 		doTemplate('view', req, res, next);
 	});
 
-	router.get(/^\/admin\/views\/([^\/]*)\/([a-f0-9\-]+)\/edit$/, userAuth, function (req, res, next) {
+	router.get(/^\/admin\/views\/([^\/]*)\/([^\/]*)\/edit$/, userAuth, function (req, res, next) {
 		doTemplate('edit', req, res, next);
 	});
 
@@ -745,7 +745,7 @@ module.exports.adminBoot = function adminBoot(server, userAuth, userModelName, t
 			// map loopback required,length to admin.validate properties
 
 			if (result.properties[prop].required) {
-				result.properties[prop].admin.validate['required'] = true;
+				result.properties[prop].admin.validate['required'] = result.properties[prop].required;
 			}
 
 			if (result.properties[prop].length) {
