@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mediapolis/digitopia-admin.git"
+    "url": "https://github.com/renjithsasidharan/digitopia-admin.git"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
