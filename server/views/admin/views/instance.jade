@@ -11,17 +11,17 @@ block content
 								if isSuperUser && isUserModel
 									if instanceIsAdminUser
 										.toggle-admin(data-endpoint='/api/' + userModel + '/' + instance.id + '/toggleadmin')
-											= "remove adminUser" 
+											= "remove adminUser"
 										if instanceIsSuperUser
 											.toggle-admin(data-endpoint='/api/' + userModel + '/' + instance.id + '/togglesuperuser')
-												= "remove superUser" 
-										else 
+												= "remove superUser"
+										else
 											.toggle-admin(data-endpoint='/api/' + userModel + '/' + instance.id + '/togglesuperuser')
-												= "make superUser" 
-									else 
+												= "make superUser"
+									else
 										.toggle-admin(data-endpoint='/api/' + userModel + '/' + instance.id + '/toggleadmin')
-											= "make adminUser" 
-									
+											= "make adminUser"
+
 								if mode === 'view'
 									i.edit-button.fa.fa-pencil-square-o.fa-2x(data-id= instance.id)
 								else
@@ -66,7 +66,7 @@ block content
 											- var val = instance[property]
 											- var encode = ''
 											- var validations = [];
-											
+
 											for validation,i in schema.properties[property].admin.validate
 												- validations.push(i + '=' + validation);
 
@@ -77,21 +77,27 @@ block content
 													- val = moment.utc(instance[property]).format('MM/DD/YYYY')
 
 											if val && type === 'datetime'
-												- var utc = instance[property].toISOString().replace(/Z$/,'');
+												//- var utc = instance[property].toISOString().replace(/Z$/,'');
+												- var utc = instance[property].toISOString();
+												div
+													- console.log(utc);
+												div
 												if mode === 'edit'
-													- val = moment.utc(utc).format('YYYY-MM-DD hh:mm:ss.SSS')
+													//- val = moment.utc(utc).format('YYYY-MM-DD hh:mm:ss.SSS')
+													//- val = moment(utc).format()
 												else
-													- val = moment.utc(utc).format('MM/DD/YYYY hh:mm:ss.SSS')
+													//- val = moment.utc(utc).format('MM/DD/YYYY hh:mm:ss.SSS')
+													//- val = moment(utc).format()
 
 											if query[property]
 												- val = query[property]
-												
+
 											if (type === 'textarea' && (dataType === 'object' || dataType === 'array' ))
 												- encode = 'json'
 
 												if val
 													- val = JSON.stringify(val,null,2)
-												
+
 											if mode === 'view'
 												.input-margins
 													if dataType === 'object' && val
@@ -106,7 +112,7 @@ block content
 															- checked= !val || val.indexOf(option) === -1 ? false : true
 														else
 															- checked= val === option
-														
+
 														div(class= multiple ? "checkbox" : "radio")
 															label
 																input(type= multiple ? "checkbox" : "radio" data-datatype= dataType name= property data-value= option checked= checked readonly= readonly)
@@ -114,17 +120,22 @@ block content
 												else if type === 'textarea'
 													textarea.form-control(name= property data-datatype= dataType data-encode= encode)= val
 												else if type === 'checkbox'
-													if !val 
+													if !val
 														- val = false
 													.input-margins
 														input(type= type data-datatype= dataType data-encode= encode name= property checked= val readonly= readonly)
 												else if type === 'datetime'
-														- var dt = val ? val.split(' ') : [null,null]
+														div
+															- console.log(val);
+														div
+														//- var dt = val ? val.split(' ') : [null,null]
+														- var date = val ?  moment(val).format('YYYY-MM-DD'): null
+														- var time = val ?  moment(val).format('HH:mm'): null
 														.row
 															.col-xs-6
-																input.form-control(type= 'date' data-datatype= type data-encode= encode name= property value= dt[0] readonly= readonly)
+																input.form-control(type= 'date' data-datatype= type data-encode= encode name= property value= date readonly= readonly)
 															.col-xs-6
-																input.form-control(type= 'time' data-datatype= type data-encode= encode data-skip= true name= property+'-time' value= dt[1] readonly= readonly)
+																input.form-control(type= 'time' data-datatype= type data-encode= encode data-skip= true name= property+'-time' value= time readonly= readonly)
 												else
 													input.form-control(type= type data-datatype= dataType data-encode= encode name= property value= val data-validate= validations.join(',') readonly= readonly)
 												.cc-brand
@@ -147,7 +158,7 @@ block content
 														.dropzone(data-jsclass="dropzoneController" data-endpoint= endpoint)
 															.dz-message.
 																Drop your photo here<br><small>(or click to upload)</small>
-										
+
 									for relationship in children
 										.form-group
 											label.col-sm-2.control-label
@@ -155,14 +166,14 @@ block content
 												if relationship.createUrl
 													| &nbsp;
 													a.fa.fa-plus.fa-2(href= relationship.createUrl)
-														
+
 											.col-sm-9
 												.input-margins
 													for child in relationship.children
 														.related-instance
 															a(href= child.url)= child.description
-												
-													
+
+
 								if mode !== 'view'
 									.form-group
 										.col-sm-2
